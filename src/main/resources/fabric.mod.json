@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "mcqq",
+  "version": "${version}",
+  "name": "MC_QQ_Fabric",
+  "description": "Translate to NoneBot2",
+  "authors": [
+    "17TheWord"
+  ],
+  "contact": {
+    "website": "https://github.com/17TheWord/MC_QQ_Fabric",
+    "repo": "https://github.com/17TheWord/MC_QQ_Fabric"
+  },
+  "license": "MIT",
+  "icon": "17TheWord_.jpg",
+  "environment": "server",
+  "entrypoints": {
+    "client": [
+      "com.github.theword.client.MCQQClient"
+    ],
+    "main": [
+      "com.github.theword.MCQQ"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
