@@ -41,7 +41,7 @@ public class ConfigReader {
             configMap = new HashMap<>();
             configMap.put("enable_mc_qq", true);
             configMap.put("enable_reconnect_msg", true);
-            configMap.put("websocket_url", "ws://127.0.0.1:8080/mcqq");
+            configMap.put("websocket_url", "ws://127.0.0.1:8080/minecraft/ws");
             configMap.put("say_way", " 说：");
             configMap.put("command_message", false);
             configMap.put("death_message", true);
