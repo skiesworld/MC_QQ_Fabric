@@ -84,7 +84,7 @@ public class Utils {
                 }
                 break;
             default:
-                LOGGER.warn("未知的 API: " + baseReturnBody.getApi());
+                LOGGER.warn("[MC_QQ] 未知的 API: " + baseReturnBody.getApi());
                 break;
         }
     }

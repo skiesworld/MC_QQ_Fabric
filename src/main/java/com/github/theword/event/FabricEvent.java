@@ -2,11 +2,11 @@ package com.github.theword.event;
 
 import com.google.gson.annotations.SerializedName;
 
-import static com.github.theword.ConfigReader.config;
+import static com.github.theword.ConfigReader.configMap;
 
 public class FabricEvent {
     @SerializedName("server_name")
-    private final String serverName = config().get("server_name").toString();
+    private final String serverName = configMap.get("server_name").toString();
 
     @SerializedName("event_name")
     private String eventName;

@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.theword.ConfigReader.configMap;
+import static com.github.theword.ConfigReader.loadConfig;
+
 
 public class MCQQ implements ModInitializer {
 
@@ -23,26 +26,29 @@ public class MCQQ implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("正在读取配置文件...");
-        httpHeaders.put("x-self-name", Utils.unicodeEncode(ConfigReader.config().get("server_name").toString()));
-        connectTime = 0;
-        serverOpen = true;
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
 
-        EventListener.eventRegister();
+            loadConfig();
+            connectTime = 0;
+            serverOpen = true;
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            LOGGER.info("WebSocket Client 正在启动...");
-            LOGGER.info("WebSocket URL: " + ConfigReader.config().get("websocket_url"));
+            httpHeaders.put("x-self-name", Utils.unicodeEncode(configMap.get("server_name").toString()));
+
+            LOGGER.info("[MC_QQ] WebSocket Client 正在启动...");
+            LOGGER.info("[MC_QQ] WebSocket URL: " + configMap.get("websocket_url"));
             minecraftServer = server;
             try {
                 wsClient = new WsClient();
                 wsClient.connect();
             } catch (Exception e) {
-                LOGGER.error("WebSocket 连接失败，URL 格式错误。");
+                LOGGER.error("[MC_QQ] WebSocket 连接失败，URL 格式错误。");
             }
         });
+
+        EventListener.eventRegister();
+
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            LOGGER.info("WebSocket Client 正在关闭...");
+            LOGGER.info("[MC_QQ] WebSocket Client 正在关闭...");
             serverOpen = false;
             wsClient.close();
         });
