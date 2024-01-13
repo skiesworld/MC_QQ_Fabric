@@ -8,8 +8,8 @@ public class BaseMessageEvent extends BaseEvent {
     private FabricServerPlayer player;
     private String message;
 
-    public BaseMessageEvent(String messageId, String serverName, String eventName, String subType, FabricServerPlayer player, String message) {
-        super(serverName, eventName, "message", subType);
+    public BaseMessageEvent(String eventName, String subType, String messageId, FabricServerPlayer player, String message) {
+        super(eventName, "message", subType);
         this.messageId = messageId;
         this.message = message;
         this.player = player;
