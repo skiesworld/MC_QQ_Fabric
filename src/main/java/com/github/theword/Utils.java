@@ -1,6 +1,17 @@
 package com.github.theword;
 
 
+import com.github.theword.returnBody.BaseReturnBody;
+import com.github.theword.returnBody.MessageReturnBody;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+
+import static com.github.theword.MCQQ.LOGGER;
+import static com.github.theword.MCQQ.minecraftServer;
+import static com.github.theword.parse.ParseJsonToEvent.parseMessageToText;
+
 public class Utils {
 
     /**
@@ -20,5 +31,25 @@ public class Utils {
             unicodeBytes.append("\\u").append(hexB);
         }
         return unicodeBytes.toString();
+    }
+
+
+    public static void parseWebSocketJson(String message) {
+        // 组合消息
+        Gson gson = new Gson();
+        BaseReturnBody baseReturnBody = gson.fromJson(message, BaseReturnBody.class);
+        JsonElement data = baseReturnBody.getData();
+        switch (baseReturnBody.getApi()) {
+            case "broadcast":
+                MessageReturnBody messageList = gson.fromJson(data, MessageReturnBody.class);
+                String result = parseMessageToText(messageList.getMessageList());
+                for (ServerPlayerEntity serverPlayer : minecraftServer.getPlayerManager().getPlayerList()) {
+                    serverPlayer.sendMessage(Text.literal(result));
+                }
+                break;
+            default:
+                LOGGER.warn("未知的 API: " + baseReturnBody.getApi());
+                break;
+        }
     }
 }

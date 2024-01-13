@@ -3,7 +3,6 @@ package com.github.theword.parse;
 import com.github.theword.event.*;
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
@@ -14,14 +13,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Objects;
 
-import static com.github.theword.MCQQ.serverName;
 
 public class ParseClassToJson {
     public static String parseChatMessageEvent(SignedMessage message, ServerPlayerEntity sender, MessageType.Parameters params) {
         Gson gson = new Gson();
         FabricServerMessageEvent fabricServerMessageEvent = new FabricServerMessageEvent(
                 "",
-                serverName,
                 getFabricPlayer(sender),
                 message.getContent().getString()
         );
@@ -33,7 +30,6 @@ public class ParseClassToJson {
 
         FabricServerCommandMessageEvent fabricServerCommandMessageEvent = new FabricServerCommandMessageEvent(
                 "",
-                serverName,
                 getFabricPlayer(Objects.requireNonNull(source.getPlayer())),
                 message.getContent().getString()
         );
@@ -44,7 +40,6 @@ public class ParseClassToJson {
         Gson gson = new Gson();
         FabricServerLivingEntityAfterDeathEvent fabricServerLivingEntityAfterDeathEvent = new FabricServerLivingEntityAfterDeathEvent(
                 "",
-                serverName,
                 getFabricPlayer(player),
                 damageSource.getDeathMessage(player).getString()
         );
@@ -54,7 +49,6 @@ public class ParseClassToJson {
     public static String parsePlayerConnectionJoinEvent(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
         Gson gson = new Gson();
         FabricServerPlayConnectionJoinEvent fabricServerPlayConnectionJoinEvent = new FabricServerPlayConnectionJoinEvent(
-                serverName,
                 getFabricPlayer(handler.player)
         );
         return gson.toJson(fabricServerPlayConnectionJoinEvent);
@@ -63,7 +57,6 @@ public class ParseClassToJson {
     public static String parsePlayerConnectionDisconnectEvent(ServerPlayNetworkHandler handler, MinecraftServer server) {
         Gson gson = new Gson();
         FabricServerPlayConnectionDisconnectEvent fabricServerPlayConnectionDisconnectEvent = new FabricServerPlayConnectionDisconnectEvent(
-                serverName,
                 getFabricPlayer(handler.player)
         );
         return gson.toJson(fabricServerPlayConnectionDisconnectEvent);
