@@ -12,7 +12,7 @@
     "repo": "https://github.com/17TheWord/MC_QQ_Fabric"
   },
   "license": "MIT",
-  "icon": "17TheWord_.jpg",
+  "icon": "logo.png",
   "environment": "server",
   "entrypoints": {
     "client": [
