@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import static com.github.theword.ConfigReader.config;
 
-public class BaseEvent {
+public class FabricEvent {
     @SerializedName("server_name")
     private final String serverName = config().get("server_name").toString();
 
@@ -19,7 +19,7 @@ public class BaseEvent {
 
     private final int timestamp = (int) (System.currentTimeMillis() / 1000);
 
-    public BaseEvent(String eventName, String postType, String subType) {
+    public FabricEvent(String eventName, String postType, String subType) {
         this.eventName = eventName;
         this.postType = postType;
         this.subType = subType;

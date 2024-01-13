@@ -1,6 +1,8 @@
 package com.github.theword;
 
 
+import com.github.theword.event.FabricEvent;
+import com.github.theword.event.FabricServerPlayer;
 import com.github.theword.returnBody.BaseReturnBody;
 import com.github.theword.returnBody.MessageReturnBody;
 import com.google.gson.Gson;
@@ -31,6 +33,40 @@ public class Utils {
             unicodeBytes.append("\\u").append(hexB);
         }
         return unicodeBytes.toString();
+    }
+
+    /**
+     * 获取事件的 json 字符串
+     *
+     * @param event 事件
+     * @return json 字符串
+     */
+    public static String getEventJson(FabricEvent event) {
+        Gson gson = new Gson();
+        return gson.toJson(event);
+    }
+
+    public static FabricServerPlayer getFabricPlayer(ServerPlayerEntity player) {
+        FabricServerPlayer fabricServerPlayer = new FabricServerPlayer();
+
+        fabricServerPlayer.setNickname(player.getName().getString());
+        fabricServerPlayer.setUuid(player.getUuidAsString());
+        fabricServerPlayer.setIp(player.getIp());
+        fabricServerPlayer.setDisplayName(player.getDisplayName().getString());
+        fabricServerPlayer.setMovementSpeed(player.getMovementSpeed());
+
+        fabricServerPlayer.setBlockX(player.getBlockX());
+        fabricServerPlayer.setBlockY(player.getBlockY());
+        fabricServerPlayer.setBlockZ(player.getBlockZ());
+
+        player.isCreative();
+        player.isSpectator();
+        player.isSneaking();
+        player.isSleeping();
+        player.isClimbing();
+        player.isSwimming();
+
+        return fabricServerPlayer;
     }
 
 
