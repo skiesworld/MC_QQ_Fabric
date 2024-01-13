@@ -68,7 +68,9 @@ public class WsClient extends WebSocketClient {
     public void onError(Exception exception) {
         if (serverOpen && wsClient != null) {
             connectTime++;
-            LOGGER.warn("WebSocket 连接已断开,正在第 " + connectTime + " 次重新连接。");
+            if ((Boolean) config().get("enable_reconnect_msg")) {
+                LOGGER.warn("WebSocket 连接已断开,正在第 " + connectTime + " 次重新连接。");
+            }
             try {
                 wsClient = new WsClient();
                 Thread.sleep(3000);
