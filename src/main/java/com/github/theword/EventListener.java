@@ -13,9 +13,9 @@ public class EventListener {
 
     public static void eventRegister() {
         ServerMessageEvents.CHAT_MESSAGE.register((message, player, params) -> {
-            if ((Boolean) config().get("enable_mc_qq")) {
-                wsClient.sendMessage(parseChatMessageEvent(message, player, params));
-            }
+
+            wsClient.sendMessage(parseChatMessageEvent(message, player, params));
+
         });
         ServerMessageEvents.COMMAND_MESSAGE.register((message, source, params) -> {
             if (source.isExecutedByPlayer() && (Boolean) config().get("command_message")) {
