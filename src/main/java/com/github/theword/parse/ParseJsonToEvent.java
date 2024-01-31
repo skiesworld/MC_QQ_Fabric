@@ -47,8 +47,10 @@ public class ParseJsonToEvent {
                 HoverEvent hoverEvent = null;
                 switch (myTextComponent.getHoverEvent().getAction()) {
                     case "show_text":
-                        MutableText textComponent = parseMessages(myTextComponent.getHoverEvent().getBaseComponentList());
-                        hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, textComponent);
+                        if (myTextComponent.getHoverEvent().getBaseComponentList() != null && myTextComponent.getHoverEvent().getBaseComponentList().size() > 0) {
+                            MutableText textComponent = parseMessages(myTextComponent.getHoverEvent().getBaseComponentList());
+                            hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, textComponent);
+                        }
                         break;
                     case "show_item":
 //                            hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new Item());
