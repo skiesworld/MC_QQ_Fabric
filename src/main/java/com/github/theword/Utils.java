@@ -8,11 +8,11 @@ import com.github.theword.returnBody.MessageReturnBody;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 import static com.github.theword.MCQQ.LOGGER;
 import static com.github.theword.MCQQ.minecraftServer;
-import static com.github.theword.parse.ParseJsonToEvent.parseMessageToText;
+import static com.github.theword.parse.ParseJsonToEvent.parseMessages;
 
 public class Utils {
 
@@ -78,9 +78,9 @@ public class Utils {
         switch (baseReturnBody.getApi()) {
             case "broadcast":
                 MessageReturnBody messageList = gson.fromJson(data, MessageReturnBody.class);
-                String result = parseMessageToText(messageList.getMessageList());
+                MutableText result = parseMessages(messageList.getMessageList());
                 for (ServerPlayerEntity serverPlayer : minecraftServer.getPlayerManager().getPlayerList()) {
-                    serverPlayer.sendMessage(Text.literal(result));
+                    serverPlayer.sendMessage(result);
                 }
                 break;
             default:

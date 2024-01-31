@@ -43,6 +43,7 @@ public class WsClient extends WebSocketClient {
                 parseWebSocketJson(message);
             } catch (Exception e) {
                 LOGGER.error("[MC_QQ] 解析消息时出现错误：" + message);
+                e.printStackTrace();
             }
         }
     }
