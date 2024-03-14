@@ -26,7 +26,6 @@ public class EventListener {
 
         });
 
-        // TODO: 2024/1/13 无法触发
         ServerMessageEvents.COMMAND_MESSAGE.register((message, source, params) -> {
             if (source.isExecutedByPlayer() && (Boolean) configMap.get("command_message")) {
                 FabricServerCommandMessageEvent fabricServerCommandMessageEvent = new FabricServerCommandMessageEvent(
