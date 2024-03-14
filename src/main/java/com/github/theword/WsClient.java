@@ -57,7 +57,7 @@ public class WsClient extends WebSocketClient {
      */
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        if (serverOpen && wsClient != null) {
+        if (serverOpen && wsClient != null && remote) {
             wsClient.sendPing();
         }
     }
