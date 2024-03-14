@@ -47,6 +47,7 @@ public class MCQQ implements ModInitializer {
         });
 
         EventListener.eventRegister();
+        CommandRegister.commandRegister();
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             LOGGER.info("[MC_QQ] WebSocket Client 正在关闭...");
