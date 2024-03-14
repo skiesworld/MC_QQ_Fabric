@@ -28,12 +28,16 @@ public class EventListener {
 
         ServerMessageEvents.COMMAND_MESSAGE.register((message, source, params) -> {
             if (source.isExecutedByPlayer() && (Boolean) configMap.get("command_message")) {
-                FabricServerCommandMessageEvent fabricServerCommandMessageEvent = new FabricServerCommandMessageEvent(
-                        "",
-                        getFabricPlayer(Objects.requireNonNull(source.getPlayer())),
-                        message.getContent().getString()
-                );
-                wsClient.sendMessage(getEventJson(fabricServerCommandMessageEvent));
+
+                String commandStr = message.getContent().getString();
+                if (!(commandStr.startsWith("l ") || commandStr.startsWith("login ") || commandStr.startsWith("register ") || commandStr.startsWith("reg "))) {
+                    FabricServerCommandMessageEvent fabricServerCommandMessageEvent = new FabricServerCommandMessageEvent(
+                            "",
+                            getFabricPlayer(Objects.requireNonNull(source.getPlayer())),
+                            message.getContent().getString()
+                    );
+                    wsClient.sendMessage(getEventJson(fabricServerCommandMessageEvent));
+                }
             }
         });
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
