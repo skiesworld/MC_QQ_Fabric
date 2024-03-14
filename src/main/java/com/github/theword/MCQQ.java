@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class MCQQ implements ModInitializer {
             try {
                 wsClient = new WsClient();
                 wsClient.connect();
-            } catch (Exception e) {
+            } catch (URISyntaxException e) {
                 LOGGER.error("[MC_QQ] WebSocket 连接失败，URL 格式错误。");
             }
         });
