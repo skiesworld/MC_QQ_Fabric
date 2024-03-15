@@ -15,6 +15,7 @@ import static com.github.theword.Utils.parseWebSocketJson;
 
 public class WsClient extends WebSocketClient {
     private int reconnectTimes = 1;
+    private final Timer timer = new Timer();
 
     public WsClient(String websocketUrl) throws URISyntaxException {
         super(new URI(websocketUrl));
@@ -65,18 +66,22 @@ public class WsClient extends WebSocketClient {
 
 
     public void reconnectWebsocket() {
-        Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if (config.isEnableReconnectMessage()) {
-                    LOGGER.info("[MC_QQ] %s 的 WebSocket 连接已断开,正在第 ".formatted(getURI()) + reconnectTimes + " 次重新连接");
-                }
-                reconnectTimes++;
                 reconnect();
             }
         };
         timer.schedule(timerTask, config.getReconnectInterval() * 1000L);
+    }
+
+    @Override
+    public void reconnect() {
+        if (config.isEnableReconnectMessage()) {
+            LOGGER.info("[MC_QQ] %s 的 WebSocket 连接已断开,正在第 ".formatted(getURI()) + reconnectTimes + " 次重新连接");
+        }
+        reconnectTimes++;
+        super.reconnect();
     }
 
     /**
@@ -90,6 +95,10 @@ public class WsClient extends WebSocketClient {
         if (exception instanceof ConnectException && exception.getMessage().equals("Connection refused: connect") && reconnectTimes <= config.getReconnectMaxTimes()) {
             reconnectWebsocket();
         }
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     /**
