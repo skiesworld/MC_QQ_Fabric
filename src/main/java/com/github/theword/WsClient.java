@@ -3,10 +3,12 @@ package com.github.theword;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import static com.github.theword.ConfigReader.configMap;
 import static com.github.theword.MCQQ.LOGGER;
 import static com.github.theword.MCQQ.config;
 import static com.github.theword.Utils.parseWebSocketJson;
