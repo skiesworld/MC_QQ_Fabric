@@ -5,10 +5,9 @@ import net.minecraft.server.command.CommandManager;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.text.Text;
 
-import java.net.URISyntaxException;
-
-import static com.github.theword.ConfigReader.configMap;
-import static com.github.theword.MCQQ.*;
+import static com.github.theword.MCQQ.config;
+import static com.github.theword.MCQQ.wsClientList;
+import static com.github.theword.Utils.connectWebsocket;
 
 public class CommandRegister {
     public static void commandRegister() {

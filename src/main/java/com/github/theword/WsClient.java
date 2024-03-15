@@ -8,17 +8,14 @@ import java.net.URISyntaxException;
 
 import static com.github.theword.ConfigReader.configMap;
 import static com.github.theword.MCQQ.LOGGER;
-import static com.github.theword.MCQQ.httpHeaders;
-import static com.github.theword.MCQQ.connectTime;
-import static com.github.theword.MCQQ.serverOpen;
-import static com.github.theword.MCQQ.wsClient;
+import static com.github.theword.MCQQ.config;
 import static com.github.theword.Utils.parseWebSocketJson;
 
 public class WsClient extends WebSocketClient {
 
-
-    public WsClient() throws URISyntaxException {
-        super(new URI((String) configMap.get("websocket_url")), httpHeaders);
+    public WsClient(String websocketUrl) throws URISyntaxException {
+        super(new URI(websocketUrl));
+        this.addHeader("x-self-name", Utils.unicodeEncode(config.getServerName()));
     }
 
     /**
@@ -38,7 +35,7 @@ public class WsClient extends WebSocketClient {
      */
     @Override
     public void onMessage(String message) {
-        if ((Boolean) configMap.get("enable_mc_qq")) {
+        if (config.isEnableMcQQ()) {
             try {
                 parseWebSocketJson(message);
             } catch (Exception e) {

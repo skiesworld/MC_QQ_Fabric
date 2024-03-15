@@ -8,26 +8,25 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Objects;
 
-import static com.github.theword.ConfigReader.configMap;
-import static com.github.theword.MCQQ.wsClient;
-import static com.github.theword.Utils.getEventJson;
-import static com.github.theword.Utils.getFabricPlayer;
+import static com.github.theword.MCQQ.config;
+import static com.github.theword.Utils.*;
 
 public class EventListener {
 
     public static void eventRegister() {
-        ServerMessageEvents.CHAT_MESSAGE.register((message, player, params) -> {
-            FabricServerMessageEvent fabricServerMessageEvent = new FabricServerMessageEvent(
-                    "",
-                    getFabricPlayer(player),
-                    message.getContent().getString()
-            );
-            wsClient.sendMessage(getEventJson(fabricServerMessageEvent));
-
-        });
+        if (config.isEnableChatMessage()) {
+            ServerMessageEvents.CHAT_MESSAGE.register((message, player, params) -> {
+                FabricServerMessageEvent fabricServerMessageEvent = new FabricServerMessageEvent(
+                        "",
+                        getFabricPlayer(player),
+                        message.getContent().getString()
+                );
+                sendMessage(getEventJson(fabricServerMessageEvent));
+            });
+        }
 
         ServerMessageEvents.COMMAND_MESSAGE.register((message, source, params) -> {
-            if (source.isExecutedByPlayer() && (Boolean) configMap.get("command_message")) {
+            if (source.isExecutedByPlayer() && config.isEnableCommandMessage()) {
 
                 String commandStr = message.getContent().getString();
                 if (!(commandStr.startsWith("l ") || commandStr.startsWith("login ") || commandStr.startsWith("register ") || commandStr.startsWith("reg "))) {
@@ -41,7 +40,7 @@ public class EventListener {
             }
         });
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
-            if (entity.isPlayer() && (Boolean) configMap.get("death_message")) {
+            if (entity.isPlayer() && config.isEnableDeathMessage()) {
                 ServerPlayerEntity player = (ServerPlayerEntity) entity;
                 FabricServerLivingEntityAfterDeathEvent fabricServerLivingEntityAfterDeathEvent = new FabricServerLivingEntityAfterDeathEvent(
                         "",
@@ -53,7 +52,7 @@ public class EventListener {
         });
 
         ServerPlayConnectionEvents.JOIN.register((handler, player, server) -> {
-            if ((Boolean) configMap.get("join_quit")) {
+            if (config.isEnableJoinMessage()) {
                 FabricServerPlayConnectionJoinEvent fabricServerPlayConnectionJoinEvent = new FabricServerPlayConnectionJoinEvent(
                         getFabricPlayer(handler.player)
                 );
@@ -61,7 +60,7 @@ public class EventListener {
             }
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            if ((Boolean) configMap.get("join_quit")) {
+            if (config.isEnableQuitMessage()) {
                 FabricServerPlayConnectionDisconnectEvent fabricServerPlayConnectionDisconnectEvent = new FabricServerPlayConnectionDisconnectEvent(
                         getFabricPlayer(handler.player)
                 );
