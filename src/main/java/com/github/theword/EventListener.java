@@ -13,7 +13,7 @@ import static com.github.theword.Utils.*;
 
 public class EventListener {
 
-    public static void eventRegister() {
+    public EventListener() {
         if (config.isEnableChatMessage()) {
             ServerMessageEvents.CHAT_MESSAGE.register((message, player, params) -> {
                 FabricServerMessageEvent fabricServerMessageEvent = new FabricServerMessageEvent(
