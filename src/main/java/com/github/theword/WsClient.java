@@ -18,7 +18,11 @@ public class WsClient extends WebSocketClient {
     private final Timer timer = new Timer();
 
     public WsClient(String websocketUrl) throws URISyntaxException {
-        super(new URI(websocketUrl));
+        this(new URI(websocketUrl));
+    }
+
+    public WsClient(URI uri) {
+        super(uri);
         this.addHeader("x-self-name", Utils.unicodeEncode(config.getServerName()));
     }
 
