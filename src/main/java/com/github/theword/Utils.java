@@ -1,6 +1,5 @@
 package com.github.theword;
 
-
 import com.github.theword.event.FabricEvent;
 import com.github.theword.event.FabricServerPlayer;
 import com.github.theword.returnBody.BaseReturnBody;
@@ -10,8 +9,9 @@ import com.google.gson.JsonElement;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
-import static com.github.theword.MCQQ.LOGGER;
-import static com.github.theword.MCQQ.minecraftServer;
+import java.net.URISyntaxException;
+
+import static com.github.theword.MCQQ.*;
 import static com.github.theword.parse.ParseJsonToEvent.parseMessages;
 
 public class Utils {
@@ -87,5 +87,28 @@ public class Utils {
                 LOGGER.warn("[MC_QQ] 未知的 API: " + baseReturnBody.getApi());
                 break;
         }
+    }
+
+    public static void sendMessage(String message) {
+        if (config.isEnableMcQQ()) {
+            wsClientList.forEach(
+                    wsClient -> {
+                        if (wsClient.isOpen()) {
+                            wsClient.sendMessage(message);
+                        }
+                    }
+            );
+        }
+    }
+
+    public static WsClient connectWebsocket(String url) {
+        try {
+            WsClient wsClient = new WsClient(url);
+            wsClient.connect();
+            return wsClient;
+        } catch (URISyntaxException e) {
+            LOGGER.warn("[MC_QQ] 连接 WebSocket 失败: " + e.getMessage());
+        }
+        return null;
     }
 }
