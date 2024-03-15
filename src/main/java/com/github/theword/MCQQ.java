@@ -36,14 +36,17 @@ public class MCQQ implements ModInitializer {
             });
         });
 
-        EventListener.eventRegister();
-        CommandRegister.commandRegister();
+        new EventListener();
+        new CommandRegister();
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> wsClientList.forEach(
-                wsClient -> wsClient.close(
-                        1000,
-                        "[MC_QQ]|连接至：%s 的 WebSocket Client 正在关闭".formatted(wsClient.getURI())
-                )
+                wsClient -> {
+                    wsClient.getTimer().cancel();
+                    wsClient.close(
+                            1000,
+                            "[MC_QQ]|连接至：%s 的 WebSocket Client 正在关闭".formatted(wsClient.getURI())
+                    );
+                }
         ));
     }
 }
