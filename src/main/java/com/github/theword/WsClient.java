@@ -95,11 +95,11 @@ public class WsClient extends WebSocketClient {
      *
      * @param message 消息
      */
-    public void sendMessage(String message) {
-        if (wsClient.isOpen() && (Boolean) configMap.get("enable_mc_qq")) {
-            wsClient.send(message);
+    void sendMessage(String message) {
+        if (this.isOpen()) {
+            this.send(message);
         } else {
-            LOGGER.info("[MC_QQ] 发送消息失败，没有连接到 WebSocket 服务器。");
+            LOGGER.info("[MC_QQ] 发送至 %s 的消息失败，没有连接到 WebSocket 服务器。".formatted(getURI()));
         }
     }
 }

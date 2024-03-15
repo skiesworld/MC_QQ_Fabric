@@ -35,7 +35,7 @@ public class EventListener {
                             getFabricPlayer(Objects.requireNonNull(source.getPlayer())),
                             message.getContent().getString()
                     );
-                    wsClient.sendMessage(getEventJson(fabricServerCommandMessageEvent));
+                    sendMessage(getEventJson(fabricServerCommandMessageEvent));
                 }
             }
         });
@@ -47,7 +47,7 @@ public class EventListener {
                         getFabricPlayer(player),
                         source.getDeathMessage(player).getString()
                 );
-                wsClient.sendMessage(getEventJson(fabricServerLivingEntityAfterDeathEvent));
+                sendMessage(getEventJson(fabricServerLivingEntityAfterDeathEvent));
             }
         });
 
@@ -56,7 +56,7 @@ public class EventListener {
                 FabricServerPlayConnectionJoinEvent fabricServerPlayConnectionJoinEvent = new FabricServerPlayConnectionJoinEvent(
                         getFabricPlayer(handler.player)
                 );
-                wsClient.sendMessage(getEventJson(fabricServerPlayConnectionJoinEvent));
+                sendMessage(getEventJson(fabricServerPlayConnectionJoinEvent));
             }
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
@@ -64,7 +64,7 @@ public class EventListener {
                 FabricServerPlayConnectionDisconnectEvent fabricServerPlayConnectionDisconnectEvent = new FabricServerPlayConnectionDisconnectEvent(
                         getFabricPlayer(handler.player)
                 );
-                wsClient.sendMessage(getEventJson(fabricServerPlayConnectionDisconnectEvent));
+                sendMessage(getEventJson(fabricServerPlayConnectionDisconnectEvent));
             }
         });
     }
