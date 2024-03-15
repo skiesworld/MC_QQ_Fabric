@@ -1,15 +1,15 @@
 package com.github.theword;
 
+import com.mojang.brigadier.Command;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 
-import static com.github.theword.MCQQ.config;
-import static com.github.theword.MCQQ.wsClientList;
+import static com.github.theword.MCQQ.*;
 import static com.github.theword.Utils.connectWebsocket;
 
 public class CommandRegister {
-    public static void commandRegister() {
+    public CommandRegister() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(CommandManager.literal("mcqq")
                         .requires(source -> source.hasPermissionLevel(2))
@@ -18,11 +18,12 @@ public class CommandRegister {
                                             config = new Config(true);
                                             context.getSource().sendFeedback(() -> Text.literal("[MC_QQ] 配置文件已重载"), true);
                                             wsClientList.forEach(wsClient -> {
-                                                if (wsClient.isOpen()) {
+                                                if (!wsClient.isClosed() && !wsClient.isClosing()) {
                                                     wsClient.close();
                                                 }
-                                                wsClientList.remove(wsClient);
+                                                wsClient.getTimer().cancel();
                                             });
+                                            wsClientList.clear();
                                             context.getSource().sendFeedback(() -> Text.literal("[MC_QQ] 旧链接清理完成"), true);
                                             config.getWebsocketUrlList().forEach(websocketUrl -> {
                                                 WsClient wsClient = connectWebsocket(websocketUrl);
@@ -33,7 +34,7 @@ public class CommandRegister {
                                                 }
                                             });
                                             context.getSource().sendFeedback(() -> Text.literal("[MC_QQ] 重载完成"), true);
-                                            return 1;
+                                            return Command.SINGLE_SUCCESS;
                                         }
                                 )
                         )
