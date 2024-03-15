@@ -12,6 +12,7 @@ import static com.github.theword.MCQQ.config;
 import static com.github.theword.Utils.parseWebSocketJson;
 
 public class WsClient extends WebSocketClient {
+    private int reconnectTimes = 1;
 
     public WsClient(String websocketUrl) throws URISyntaxException {
         super(new URI(websocketUrl));
@@ -25,8 +26,9 @@ public class WsClient extends WebSocketClient {
      */
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        connectTime = 0;
-        LOGGER.info("[MC_QQ] 已成功连接 WebSocket 服务器。");
+        LOGGER.info("[MC_QQ] 已成功连接至 %s WebSocket 服务器。".formatted(getURI()));
+        reconnectTimes = 1;
+        LOGGER.debug("[MC_QQ] %s 的重连次数已重置".formatted(getURI()));
     }
 
     /**
@@ -39,7 +41,7 @@ public class WsClient extends WebSocketClient {
             try {
                 parseWebSocketJson(message);
             } catch (Exception e) {
-                LOGGER.error("[MC_QQ] 解析消息时出现错误：" + message);
+                LOGGER.error("[MC_QQ] 解析来自 %s 的消息时出现错误：".formatted(getURI()) + message);
                 e.printStackTrace();
             }
         }
@@ -54,9 +56,25 @@ public class WsClient extends WebSocketClient {
      */
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        if (serverOpen && wsClient != null && remote) {
-            wsClient.sendPing();
+        if (remote && reconnectTimes <= config.getReconnectMaxTimes()) {
+            reconnectWebsocket();
         }
+    }
+
+
+    public void reconnectWebsocket() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (config.isEnableReconnectMessage()) {
+                    LOGGER.info("[MC_QQ] %s 的 WebSocket 连接已断开,正在第 ".formatted(getURI()) + reconnectTimes + " 次重新连接");
+                }
+                reconnectTimes++;
+                reconnect();
+            }
+        };
+        timer.schedule(timerTask, config.getReconnectInterval() * 1000L);
     }
 
     /**
@@ -66,20 +84,9 @@ public class WsClient extends WebSocketClient {
      */
     @Override
     public void onError(Exception exception) {
-        if (serverOpen && wsClient != null) {
-            connectTime++;
-            if ((Boolean) configMap.get("enable_reconnect_msg")) {
-                LOGGER.info("[MC_QQ] WebSocket 连接已断开,正在第 " + connectTime + " 次重新连接至" + configMap.get("websocket_url"));
-            }
-            try {
-                wsClient = new WsClient();
-                Thread.sleep(3000);
-                wsClient.connectBlocking();
-            } catch (URISyntaxException e) {
-                LOGGER.error("[MC_QQ] WebSocket 连接失败，URL 格式错误。");
-            } catch (InterruptedException e) {
-                LOGGER.error("[MC_QQ] WebSocket 连接失败，线程中断。");
-            }
+        LOGGER.error("[MC_QQ] %s WebSocket 连接出现异常：".formatted(getURI()) + exception.getMessage());
+        if (exception instanceof ConnectException && exception.getMessage().equals("Connection refused: connect") && reconnectTimes <= config.getReconnectMaxTimes()) {
+            reconnectWebsocket();
         }
     }
 
