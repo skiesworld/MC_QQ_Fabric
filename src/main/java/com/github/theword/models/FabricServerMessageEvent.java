@@ -1,4 +1,4 @@
-package com.github.theword.event;
+package com.github.theword.models;
 
 public class FabricServerMessageEvent extends FabricMessageEvent {
     public FabricServerMessageEvent(String messageId, FabricServerPlayer player, String message) {
