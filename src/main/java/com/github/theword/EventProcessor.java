@@ -1,6 +1,6 @@
 package com.github.theword;
 
-import com.github.theword.event.*;
+import com.github.theword.models.*;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -9,11 +9,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import java.util.Objects;
 
 import static com.github.theword.MCQQ.config;
-import static com.github.theword.Utils.*;
+import static com.github.theword.utils.Tool.*;
 
-public class EventListener {
+public class EventProcessor {
 
-    public EventListener() {
+    public EventProcessor() {
         if (config.isEnableChatMessage()) {
             ServerMessageEvents.CHAT_MESSAGE.register((message, player, params) -> {
                 FabricServerMessageEvent fabricServerMessageEvent = new FabricServerMessageEvent(
@@ -29,7 +29,7 @@ public class EventListener {
             if (source.isExecutedByPlayer() && config.isEnableCommandMessage()) {
 
                 String commandStr = message.getContent().getString();
-                if (!(commandStr.startsWith("l ") || commandStr.startsWith("login ") || commandStr.startsWith("register ") || commandStr.startsWith("reg "))) {
+                if (!(commandStr.startsWith("l ") || commandStr.startsWith("login ") || commandStr.startsWith("register ") || commandStr.startsWith("reg ") || commandStr.startsWith("mcqq "))) {
                     FabricServerCommandMessageEvent fabricServerCommandMessageEvent = new FabricServerCommandMessageEvent(
                             "",
                             getFabricPlayer(Objects.requireNonNull(source.getPlayer())),
