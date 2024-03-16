@@ -1,4 +1,4 @@
-package com.github.theword.parse;
+package com.github.theword.utils;
 
 import com.github.theword.returnBody.returnModle.MyBaseComponent;
 import com.github.theword.returnBody.returnModle.MyTextComponent;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ParseJsonToEvent {
 
-    public static MutableText parseMessages(List<? extends MyBaseComponent> myBaseComponentList) {
+    public MutableText parseMessages(List<? extends MyBaseComponent> myBaseComponentList) {
         MutableText mutableText = parsePerMessageToMultiText(myBaseComponentList.get(0));
         for (int i = 1; i < myBaseComponentList.size(); i++) {
             mutableText.append(parsePerMessageToMultiText(myBaseComponentList.get(i)));
@@ -17,7 +17,7 @@ public class ParseJsonToEvent {
         return mutableText;
     }
 
-    public static MutableText parsePerMessageToMultiText(MyBaseComponent myBaseComponent) {
+    public MutableText parsePerMessageToMultiText(MyBaseComponent myBaseComponent) {
         LiteralTextContent literalTextContent = new LiteralTextContent(myBaseComponent.getText());
         Identifier identifier = null;
         if (myBaseComponent.getFont() != null) {

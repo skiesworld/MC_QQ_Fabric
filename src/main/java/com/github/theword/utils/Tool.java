@@ -1,20 +1,14 @@
-package com.github.theword;
+package com.github.theword.utils;
 
-
-import com.github.theword.event.FabricEvent;
-import com.github.theword.event.FabricServerPlayer;
-import com.github.theword.returnBody.BaseReturnBody;
-import com.github.theword.returnBody.MessageReturnBody;
+import com.github.theword.constant.WebsocketConstantMessage;
+import com.github.theword.models.FabricEvent;
+import com.github.theword.models.FabricServerPlayer;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
 
-import static com.github.theword.MCQQ.LOGGER;
-import static com.github.theword.MCQQ.minecraftServer;
-import static com.github.theword.parse.ParseJsonToEvent.parseMessages;
+import static com.github.theword.MCQQ.*;
 
-public class Utils {
+public class Tool {
 
     /**
      * 字符串转为 unicode 编码
@@ -22,7 +16,7 @@ public class Utils {
      * @param string 字符串
      * @return unicode编码
      */
-    static String unicodeEncode(String string) {
+    public static String unicodeEncode(String string) {
         char[] utfBytes = string.toCharArray();
         StringBuilder unicodeBytes = new StringBuilder();
         for (char utfByte : utfBytes) {
@@ -70,22 +64,17 @@ public class Utils {
     }
 
 
-    public static void parseWebSocketJson(String message) {
-        // 组合消息
-        Gson gson = new Gson();
-        BaseReturnBody baseReturnBody = gson.fromJson(message, BaseReturnBody.class);
-        JsonElement data = baseReturnBody.getData();
-        switch (baseReturnBody.getApi()) {
-            case "broadcast":
-                MessageReturnBody messageList = gson.fromJson(data, MessageReturnBody.class);
-                MutableText result = parseMessages(messageList.getMessageList());
-                for (ServerPlayerEntity serverPlayer : minecraftServer.getPlayerManager().getPlayerList()) {
-                    serverPlayer.sendMessage(result);
-                }
-                break;
-            default:
-                LOGGER.warn("[MC_QQ] 未知的 API: " + baseReturnBody.getApi());
-                break;
+    public static void sendMessage(String message) {
+        if (config.isEnableMcQQ()) {
+            wsClientList.forEach(
+                    wsClient -> {
+                        if (wsClient.isOpen()) {
+                            wsClient.send(message);
+                        } else {
+                            LOGGER.info(String.format(WebsocketConstantMessage.WEBSOCKET_IS_NOT_OPEN_WHEN_SEND_MESSAGE, wsClient.getURI()));
+                        }
+                    }
+            );
         }
     }
 }

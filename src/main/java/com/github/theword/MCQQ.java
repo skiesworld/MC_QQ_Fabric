@@ -1,5 +1,7 @@
 package com.github.theword;
 
+import com.github.theword.commands.CommandRegister;
+import com.github.theword.constant.WebsocketConstantMessage;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -7,52 +9,44 @@ import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.github.theword.ConfigReader.configMap;
-import static com.github.theword.ConfigReader.loadConfig;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MCQQ implements ModInitializer {
 
-    static final Logger LOGGER = LogUtils.getLogger();
-
-    static WsClient wsClient;
-    static Map<String, String> httpHeaders = new HashMap<>();
-    static int connectTime;
-    static boolean serverOpen;
-
-    static MinecraftServer minecraftServer;
+    public static final Logger LOGGER = LogUtils.getLogger();
+    public static Config config = new Config(true);
+    public static MinecraftServer minecraftServer;
+    public static List<WsClient> wsClientList = new ArrayList<>();
 
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-
-            loadConfig();
-            connectTime = 0;
-            serverOpen = true;
-
-            httpHeaders.put("x-self-name", Utils.unicodeEncode(configMap.get("server_name").toString()));
-
-            LOGGER.info("[MC_QQ] WebSocket Client 正在启动...");
-            LOGGER.info("[MC_QQ] WebSocket URL: " + configMap.get("websocket_url"));
+            LOGGER.info(WebsocketConstantMessage.WEBSOCKET_RUNNING);
             minecraftServer = server;
-            try {
-                wsClient = new WsClient();
-                wsClient.connect();
-            } catch (URISyntaxException e) {
-                LOGGER.error("[MC_QQ] WebSocket 连接失败，URL 格式错误。");
-            }
+            config.getWebsocketUrlList().forEach(url -> {
+                try {
+                    WsClient wsClient = new WsClient(url);
+                    wsClient.connect();
+                    wsClientList.add(wsClient);
+                } catch (URISyntaxException e) {
+                    LOGGER.warn(WebsocketConstantMessage.WEBSOCKET_ERROR_URI_SYNTAX_ERROR.formatted(url));
+                }
+            });
         });
 
-        EventListener.eventRegister();
-        CommandRegister.commandRegister();
+        new EventProcessor();
+        new CommandRegister();
 
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            LOGGER.info("[MC_QQ] WebSocket Client 正在关闭...");
-            serverOpen = false;
-            wsClient.close();
-        });
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> wsClientList.forEach(
+                wsClient -> {
+                    wsClient.getTimer().cancel();
+                    wsClient.close(
+                            1000,
+                            WebsocketConstantMessage.WEBSOCKET_CLOSING.formatted(wsClient.getURI())
+                    );
+                }
+        ));
     }
 }

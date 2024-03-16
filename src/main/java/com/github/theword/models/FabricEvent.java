@@ -1,12 +1,12 @@
-package com.github.theword.event;
+package com.github.theword.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import static com.github.theword.ConfigReader.configMap;
+import static com.github.theword.MCQQ.config;
 
 public class FabricEvent {
     @SerializedName("server_name")
-    private final String serverName = configMap.get("server_name").toString();
+    private final String serverName = config.getServerName();
 
     @SerializedName("event_name")
     private String eventName;
