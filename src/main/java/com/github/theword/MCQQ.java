@@ -1,5 +1,7 @@
 package com.github.theword;
 
+import com.github.theword.commands.CommandRegister;
+import com.github.theword.constant.WebsocketConstantMessage;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -13,30 +15,28 @@ import java.util.List;
 
 public class MCQQ implements ModInitializer {
 
-    static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public static Config config = new Config(true);
-    static MinecraftServer minecraftServer;
-    static List<WsClient> wsClientList = new ArrayList<>();
+    public static MinecraftServer minecraftServer;
+    public static List<WsClient> wsClientList = new ArrayList<>();
 
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-
-            LOGGER.info("[MC_QQ] WebSocket Client 正在启动...");
+            LOGGER.info(WebsocketConstantMessage.WEBSOCKET_RUNNING);
             minecraftServer = server;
-
             config.getWebsocketUrlList().forEach(url -> {
                 try {
                     WsClient wsClient = new WsClient(url);
                     wsClient.connect();
                     wsClientList.add(wsClient);
                 } catch (URISyntaxException e) {
-                    LOGGER.warn("[MC_QQ]|连接至：%s WebSocket URL 配置错误，无法连接！".formatted(url));
+                    LOGGER.warn(WebsocketConstantMessage.WEBSOCKET_ERROR_URI_SYNTAX_ERROR.formatted(url));
                 }
             });
         });
 
-        new EventListener();
+        new EventProcessor();
         new CommandRegister();
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> wsClientList.forEach(
@@ -44,7 +44,7 @@ public class MCQQ implements ModInitializer {
                     wsClient.getTimer().cancel();
                     wsClient.close(
                             1000,
-                            "[MC_QQ]|连接至：%s 的 WebSocket Client 正在关闭".formatted(wsClient.getURI())
+                            WebsocketConstantMessage.WEBSOCKET_CLOSING.formatted(wsClient.getURI())
                     );
                 }
         ));
