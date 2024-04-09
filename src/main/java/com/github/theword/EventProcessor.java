@@ -1,6 +1,6 @@
 package com.github.theword;
 
-import com.github.theword.models.fabric.*;
+import com.github.theword.eventModels.fabric.*;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
