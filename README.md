@@ -12,8 +12,8 @@
 1. 克隆项目
 
     ```shell
-    git clone https://github.com/17TheWord/MC_QQ_Forge.git
-    cd MC_QQ_Forge
+    git clone https://github.com/17TheWord/MC_QQ_Fabric.git
+    cd MC_QQ_Fabric
     ```
 
 2. 构建项目
@@ -26,8 +26,8 @@
 
 觉得好用可以给这个项目点个 `Star` 或者去 [爱发电](https://afdian.net/a/17TheWord) 投喂我。
 
-有意见或者建议也欢迎提交 [Issues](https://github.com/17TheWord/MC_QQ_Forge/issues)
-和 [Pull requests](https://github.com/17TheWord/MC_QQ_Forge/pulls) 。
+有意见或者建议也欢迎提交 [Issues](https://github.com/17TheWord/MC_QQ_Fabric/issues)
+和 [Pull requests](https://github.com/17TheWord/MC_QQ_Fabric/pulls) 。
 
 ## 开源许可
 
