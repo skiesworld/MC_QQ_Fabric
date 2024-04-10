@@ -59,7 +59,11 @@ java {
 }
 
 jar {
-    from(project.zipTree("libs/snakeyaml-${snakeyaml_version}.jar"))
-    from(project.zipTree("libs/Java-WebSocket-${java_websocket_version}.jar"))
-    from(project.zipTree("libs/MC_QQ_Tool-${mcqq_tool_version}.jar"))
+    from {
+        configurations.compileClasspath.collect {
+            if (it.name.containsIgnoreCase("mc_qq") || it.name.containsIgnoreCase("websocket") || it.name.containsIgnoreCase("snake")) {
+                zipTree(it)
+            }
+        }
+    }
 }
