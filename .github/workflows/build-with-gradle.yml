@@ -37,9 +37,9 @@ jobs:
           USERNAME: ${{ github.actor }}
           PACKAGE_READ_ONLY_TOKEN: ${{ secrets.PACKAGE_READ_ONLY_TOKEN }}
         run: ./gradlew build
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-    # the publishing section of your build.gradle
-    # - name: Publish to GitHub Packages
-    #   run: ./gradlew publish
-    #   env:
-    #     TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
+      # the publishing section of your build.gradle
+      - name: Publish to GitHub Packages
+        run: ./gradlew publish
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
