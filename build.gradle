@@ -10,15 +10,21 @@ base {
     archivesName = "${archives_base_name}_${minecraft_version}"
 }
 
+def configureRepository = { repoUrl ->
+    maven {
+        url = uri(repoUrl)
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("PACKAGE_READ_ONLY_TOKEN")
+        }
+    }
+}
+
 publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri(maven_url)
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
+            configureRepository(maven_url)
         }
     }
     publications {
@@ -29,13 +35,7 @@ publishing {
 }
 
 repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/17TheWord/MC_QQ_Tool")
-        credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-            password = project.findProperty("gpr.key") ?: System.getenv("PACKAGE_READ_ONLY_TOKEN")
-        }
-    }
+    configureRepository("https://maven.pkg.github.com/17TheWord/MC_QQ_Tool")
 }
 
 
