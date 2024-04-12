@@ -1,6 +1,6 @@
-package com.github.theword;
+package com.github.theword.mcqq;
 
-import com.github.theword.eventModels.fabric.*;
+import com.github.theword.mcqq.eventModels.fabric.*;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -8,8 +8,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Objects;
 
-import static com.github.theword.utils.Tool.config;
-import static com.github.theword.utils.Tool.sendMessage;
+import static com.github.theword.mcqq.utils.Tool.config;
+import static com.github.theword.mcqq.utils.Tool.sendMessage;
 
 public class EventProcessor {
 

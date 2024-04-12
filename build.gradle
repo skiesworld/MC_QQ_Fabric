@@ -13,6 +13,10 @@ base {
 repositories {
     maven {
         url = uri(maven_url)
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("PACKAGE_READ_ONLY_TOKEN")
+        }
     }
 }
 
@@ -26,7 +30,7 @@ dependencies {
 
     annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
     implementation "org.projectlombok:lombok:${project.lombok_version}"
-    implementation "com.github.theword:MC_QQ_Tool:${project.mcqq_tool_version}"
+    implementation "com.github.theword.mcqq:mc-qq-tool:${project.mcqq_tool_version}"
 }
 
 processResources {

@@ -1,12 +1,12 @@
-package com.github.theword.commands.subCommands;
+package com.github.theword.mcqq.commands.subCommands;
 
-import com.github.theword.commands.SubCommand;
+import com.github.theword.mcqq.commands.SubCommand;
 import com.mojang.brigadier.Command;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 
-import static com.github.theword.commands.CommandManager.subCommandList;
+import static com.github.theword.mcqq.commands.CommandManager.subCommandList;
 
 public class HelpCommand extends SubCommand {
     @Override

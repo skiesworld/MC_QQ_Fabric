@@ -1,10 +1,10 @@
-package com.github.theword.commands.subCommands;
+package com.github.theword.mcqq.commands.subCommands;
 
-import com.github.theword.commands.SubCommand;
-import com.github.theword.constant.CommandConstantMessage;
-import com.github.theword.constant.WebsocketConstantMessage;
-import com.github.theword.utils.Config;
-import com.github.theword.websocket.WsClient;
+import com.github.theword.mcqq.commands.SubCommand;
+import com.github.theword.mcqq.constant.CommandConstantMessage;
+import com.github.theword.mcqq.constant.WebsocketConstantMessage;
+import com.github.theword.mcqq.utils.Config;
+import com.github.theword.mcqq.websocket.WsClient;
 import com.mojang.brigadier.Command;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
@@ -13,8 +13,8 @@ import net.minecraft.text.Text;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static com.github.theword.utils.Tool.config;
-import static com.github.theword.utils.Tool.wsClientList;
+import static com.github.theword.mcqq.utils.Tool.config;
+import static com.github.theword.mcqq.utils.Tool.wsClientList;
 
 
 public class ReloadCommand extends SubCommand {
