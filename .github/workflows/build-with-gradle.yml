@@ -9,8 +9,8 @@ name: Build with Gradle
 
 on:
   push:
-    branches:
-      - "!dev-"
+    branches-ignore:
+      - 'dev-*'
 
 jobs:
   build:
