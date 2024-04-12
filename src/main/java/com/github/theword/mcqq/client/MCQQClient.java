@@ -1,4 +1,4 @@
-package com.github.theword.client;
+package com.github.theword.mcqq.client;
 
 import net.fabricmc.api.ClientModInitializer;
 

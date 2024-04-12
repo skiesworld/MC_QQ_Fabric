@@ -1,14 +1,14 @@
-package com.github.theword.commands.subCommands;
+package com.github.theword.mcqq.commands.subCommands;
 
-import com.github.theword.commands.SubCommand;
-import com.github.theword.constant.CommandConstantMessage;
+import com.github.theword.mcqq.commands.SubCommand;
+import com.github.theword.mcqq.constant.CommandConstantMessage;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.github.theword.utils.Tool.wsClientList;
+import static com.github.theword.mcqq.utils.Tool.wsClientList;
 
 
 public class ReconnectCommand extends SubCommand {

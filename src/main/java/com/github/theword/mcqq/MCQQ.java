@@ -1,10 +1,10 @@
-package com.github.theword;
+package com.github.theword.mcqq;
 
-import com.github.theword.commands.CommandRegister;
-import com.github.theword.constant.WebsocketConstantMessage;
-import com.github.theword.utils.Config;
-import com.github.theword.utils.HandleWebsocketMessageService;
-import com.github.theword.websocket.WsClient;
+import com.github.theword.mcqq.commands.CommandRegister;
+import com.github.theword.mcqq.constant.WebsocketConstantMessage;
+import com.github.theword.mcqq.utils.Config;
+import com.github.theword.mcqq.utils.HandleWebsocketMessageService;
+import com.github.theword.mcqq.websocket.WsClient;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -14,7 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import static com.github.theword.utils.Tool.*;
+import static com.github.theword.mcqq.utils.Tool.*;
 
 
 public class MCQQ implements ModInitializer {
