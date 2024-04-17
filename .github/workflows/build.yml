@@ -5,12 +5,12 @@
 # This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
 
-name: Gradle Package
+name: Build With Gradle
 
 on:
   push:
-    branches:
-      - "!dev-"
+    branches-ignore: 
+      - "dev-*"
 
 jobs:
   build:
@@ -35,5 +35,5 @@ jobs:
       - name: Build with Gradle
         env:
           USERNAME: ${{ github.actor }}
-          PACKAGE_READ_AND_WRITE_TOKEN: ${{ secrets.PACKAGE_READ_AND_WRITE_TOKEN }}
+          PACKAGE_READ_ONLY_TOKEN : ${{ secrets.PACKAGE_READ_ONLY_TOKEN  }}
         run: ./gradlew build
