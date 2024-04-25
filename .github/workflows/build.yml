@@ -10,7 +10,7 @@ name: Build With Gradle
 on:
   push:
     branches:
-      - "!dev-*"
+      - "*"
 
 jobs:
   build:
