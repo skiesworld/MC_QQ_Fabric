@@ -35,11 +35,11 @@ public class HelpCommand extends SubCommand {
                         .requires(source -> source.hasPermissionLevel(2))
                         .executes(
                                 context -> {
-                                    context.getSource().sendFeedback(() -> Text.literal("-------------------"), false);
+                                    context.getSource().sendFeedback(Text.literal("-------------------"), false);
                                     for (SubCommand subCommand : subCommandList) {
-                                        context.getSource().sendFeedback(() -> Text.literal(subCommand.getUsage() + "---" + subCommand.getDescription()), false);
+                                        context.getSource().sendFeedback(Text.literal(subCommand.getUsage() + "---" + subCommand.getDescription()), false);
                                     }
-                                    context.getSource().sendFeedback(() -> Text.literal("-------------------"), false);
+                                    context.getSource().sendFeedback(Text.literal("-------------------"), false);
                                     return Command.SINGLE_SUCCESS;
                                 }
                         )

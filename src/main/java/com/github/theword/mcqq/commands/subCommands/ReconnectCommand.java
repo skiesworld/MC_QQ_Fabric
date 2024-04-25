@@ -38,28 +38,28 @@ public class ReconnectCommand extends SubCommand {
                         .requires(source -> source.hasPermissionLevel(2))
                         .then(CommandManager.literal("reconnect")
                                 .executes(context -> {
-                                    context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RECONNECT_NOT_OPEN_CLIENT), false);
+                                    context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RECONNECT_NOT_OPEN_CLIENT), false);
                                     AtomicInteger opened = new AtomicInteger();
                                     wsClientList.forEach(wsClient -> {
                                         if (!wsClient.isOpen()) {
                                             wsClient.reconnectWebsocket();
-                                            context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RECONNECT_MESSAGE.formatted(wsClient.getURI())), false);
+                                            context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RECONNECT_MESSAGE.formatted(wsClient.getURI())), false);
                                         } else {
                                             opened.getAndIncrement();
                                         }
                                     });
                                     if (opened.get() == wsClientList.size()) {
-                                        context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RECONNECT_NO_CLIENT_NEED_RECONNECT), false);
+                                        context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RECONNECT_NO_CLIENT_NEED_RECONNECT), false);
                                     }
-                                    context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RECONNECTED), false);
+                                    context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RECONNECTED), false);
                                     return 1;
                                 }).then(CommandManager.literal("all").executes(context -> {
-                                    context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RECONNECT_ALL_CLIENT), false);
+                                    context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RECONNECT_ALL_CLIENT), false);
                                     wsClientList.forEach(wsClient -> {
                                         wsClient.reconnectWebsocket();
-                                        context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RECONNECT_MESSAGE.formatted(wsClient.getURI())), false);
+                                        context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RECONNECT_MESSAGE.formatted(wsClient.getURI())), false);
                                     });
-                                    context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RECONNECTED), false);
+                                    context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RECONNECTED), false);
                                     return 1;
                                 }))
                         )

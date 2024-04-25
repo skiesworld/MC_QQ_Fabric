@@ -46,26 +46,26 @@ public class ReloadCommand extends SubCommand {
                         .then(CommandManager.literal("reload")
                                 .executes(context -> {
                                             config = new Config(true);
-                                            context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RELOAD_CONFIG), false);
+                                            context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RELOAD_CONFIG), false);
                                             wsClientList.forEach(wsClient -> {
                                                 if (!wsClient.isClosed() && !wsClient.isClosing()) {
-                                                    context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RELOAD_CLOSE_WEBSOCKET_CLIENT.formatted(wsClient.getURI())), false);
+                                                    context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RELOAD_CLOSE_WEBSOCKET_CLIENT.formatted(wsClient.getURI())), false);
                                                     wsClient.close();
                                                 }
                                                 wsClient.getTimer().cancel();
                                             });
                                             wsClientList.clear();
-                                            context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RELOAD_CLEAR_WEBSOCKET_CLIENT_LIST), false);
+                                            context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RELOAD_CLEAR_WEBSOCKET_CLIENT_LIST), false);
                                             config.getWebsocketUrlList().forEach(websocketUrl -> {
                                                 try {
                                                     WsClient wsClient = new WsClient(new URI(websocketUrl));
                                                     wsClient.connect();
                                                     wsClientList.add(wsClient);
                                                 } catch (URISyntaxException e) {
-                                                    context.getSource().sendFeedback(() -> Text.literal(WebsocketConstantMessage.WEBSOCKET_ERROR_URI_SYNTAX_ERROR.formatted(websocketUrl)), false);
+                                                    context.getSource().sendFeedback( Text.literal(WebsocketConstantMessage.WEBSOCKET_ERROR_URI_SYNTAX_ERROR.formatted(websocketUrl)), false);
                                                 }
                                             });
-                                            context.getSource().sendFeedback(() -> Text.literal(CommandConstantMessage.RELOADED), false);
+                                            context.getSource().sendFeedback( Text.literal(CommandConstantMessage.RELOADED), false);
                                             return Command.SINGLE_SUCCESS;
                                         }
                                 )
