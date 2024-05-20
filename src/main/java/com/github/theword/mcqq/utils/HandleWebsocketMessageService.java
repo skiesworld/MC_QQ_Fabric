@@ -5,8 +5,11 @@ import com.github.theword.mcqq.returnBody.BaseReturnBody;
 import com.github.theword.mcqq.returnBody.MessageReturnBody;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 import static com.github.theword.mcqq.MCQQ.minecraftServer;
 import static com.github.theword.mcqq.utils.Tool.logger;
@@ -31,5 +34,16 @@ public class HandleWebsocketMessageService implements HandleWebsocketMessage {
                 logger.warn(WebsocketConstantMessage.WEBSOCKET_UNKNOWN_API + baseReturnBody.getApi());
                 break;
         }
+    }
+
+    /**
+     * @param object  命令发送者
+     * @param message 消息
+     */
+    @Override
+    public void handleCommandReturnMessage(Object object, String message) {
+        CommandContext<ServerCommandSource> context = (CommandContext<ServerCommandSource>) object;
+        context.getSource().sendFeedback(() -> Text.literal(message), false);
+        ;
     }
 }
