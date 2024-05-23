@@ -1,6 +1,6 @@
 package com.github.theword.mcqq;
 
-import com.github.theword.mcqq.commands.CommandRegister;
+import com.github.theword.mcqq.commands.CommandExecutor;
 import com.github.theword.mcqq.constant.WebsocketConstantMessage;
 import com.github.theword.mcqq.utils.HandleWebsocketMessageService;
 import net.fabricmc.api.ModInitializer;
