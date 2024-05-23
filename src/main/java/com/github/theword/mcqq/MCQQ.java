@@ -25,7 +25,7 @@ public class MCQQ implements ModInitializer {
         });
 
         new EventProcessor();
-        new CommandRegister();
+        new CommandExecutor();
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> stopWebsocket(1000, WebsocketConstantMessage.WEBSOCKET_CLOSING));
     }
