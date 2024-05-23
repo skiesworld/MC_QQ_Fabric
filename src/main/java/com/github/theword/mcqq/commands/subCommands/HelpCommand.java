@@ -1,49 +1,34 @@
 package com.github.theword.mcqq.commands.subCommands;
 
+import com.github.theword.mcqq.commands.FabricSubCommand;
 import com.github.theword.mcqq.commands.SubCommand;
+import com.github.theword.mcqq.commands.subCommands.client.ReconnectCommand;
 import com.mojang.brigadier.Command;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.command.CommandManager;
+import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
-import static com.github.theword.mcqq.commands.CommandManager.subCommandList;
+import java.util.ArrayList;
+import java.util.List;
 
-public class HelpCommand extends SubCommand {
-    @Override
-    public String getName() {
-        return "mcqq";
-    }
 
-    @Override
-    public String getDescription() {
-        return "查看 MC_QQ 命令";
-    }
+public class HelpCommand extends HelpCommandAbstract implements FabricSubCommand {
 
-    @Override
-    public String getSyntax() {
-        return "/mcqq";
-    }
-
-    @Override
-    public String getUsage() {
-        return "使用：/mcqq";
-    }
+    private final List<SubCommand> subCommandList = new ArrayList<>();
 
     public HelpCommand() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                dispatcher.register(CommandManager.literal("mcqq")
-                        .requires(source -> source.hasPermissionLevel(2))
-                        .executes(
-                                context -> {
-                                    context.getSource().sendFeedback(() -> Text.literal("-------------------"), false);
-                                    for (SubCommand subCommand : subCommandList) {
-                                        context.getSource().sendFeedback(() -> Text.literal(subCommand.getUsage() + "---" + subCommand.getDescription()), false);
-                                    }
-                                    context.getSource().sendFeedback(() -> Text.literal("-------------------"), false);
-                                    return Command.SINGLE_SUCCESS;
-                                }
-                        )
-                )
-        );
+        subCommandList.add(new HelpCommand());
+        subCommandList.add(new ReloadCommand());
+        subCommandList.add(new ReconnectCommand());
+    }
+
+    @Override
+    public int onCommand(CommandContext<ServerCommandSource> context) {
+        context.getSource().sendFeedback(() -> Text.literal("-------------------"), false);
+        for (SubCommand subCommand : subCommandList) {
+            context.getSource().sendFeedback(() -> Text.literal(subCommand.getUsage() + "---" + subCommand.getDescription()), false);
+        }
+        context.getSource().sendFeedback(() -> Text.literal("-------------------"), false);
+        return Command.SINGLE_SUCCESS;
     }
 }
