@@ -11,6 +11,9 @@ on:
   push:
     branches-ignore:
       - "dev-*"
+  pull_request:
+    types:
+      - "opened"
 
 jobs:
   build:
@@ -33,12 +36,12 @@ jobs:
       - name: Build with Gradle
         env:
           USERNAME: ${{ github.actor }}
-
           PACKAGE_READ_ONLY_TOKEN: ${{ secrets.PACKAGE_READ_ONLY_TOKEN }}
         run: |
           ./gradlew build
 
       - name: Push to GitHub Artifacts
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           path: build/libs/
