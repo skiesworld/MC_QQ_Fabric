@@ -18,6 +18,7 @@ public class CommandExecutor {
                 dispatcher.register(
                         CommandManager.literal(BaseConstant.COMMAND_HEADER)
                                 .requires(source -> source.hasPermissionLevel(2))
+                                .executes(context -> new HelpCommand().onCommand(context))
                                 .then(CommandManager.literal("help")
                                         .executes(context -> new HelpCommand().onCommand(context))
                                 )
