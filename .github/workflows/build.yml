@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BUILD_DIR: target/
+      BUILD_DIR: build/libs/
       JAR_PATTERN: MC_QQ_*.jar
 
     steps:
