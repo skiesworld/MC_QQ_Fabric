@@ -46,7 +46,7 @@ jobs:
       - name: Find Artifact
         if: github.event_name == 'push'
         run: |
-          ARTIFACT_FILE=$(find $BUILD_DIR -name $JAR_PATTERN -maxdepth 1)
+          ARTIFACT_FILE=$(find $BUILD_DIR -name "$JAR_PATTERN" -maxdepth 1 | grep -v sources)
           ARTIFACT_NAME=$(basename -- "$ARTIFACT_FILE")
 
           echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
