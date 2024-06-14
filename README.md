@@ -30,8 +30,7 @@
            - `java_websocket_version`：Websocket 版本号（或在 `gradle.properties` 中通过 `java_websocket_version=x.x.x` 配置版本号）
            - `MCQQ_TOOL_VERSION`：工具包版本号（或在 `gradle.properties` 中通过 `mcqq_tool_version=x.x.x` 配置版本号）
            - `snakeyaml_version`：SnakeYAML 版本号（或在 `gradle.properties` 中通过 `snakeyaml_version=x.x.x` 配置版本号）
-           - `slf4j_version`：SLF4J 版本号（或在 `gradle.properties` 中通过 `slf4j_version=x.x.x` 配置版本号）
-           - `slf4j_simple_version`：SLF4J-Simple 版本号（或在 `gradle.properties` 中通过 `slf4j_simple_version=x.x.x` 配置版本号）
+
 3. 构建项目
 
     ```shell
