@@ -3,7 +3,7 @@
   "id": "mcqq",
   "version": "${version}",
   "name": "MC_QQ_Fabric",
-  "description": "Translate to NoneBot2",
+  "description": "Connect to NoneBot2",
   "authors": [
     "17THeWord"
   ],
