@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-version = project.mod_version
 group = project.maven_group
+version = System.getenv("MC_QQ_VERSION") ?: project.findProperty("mod_version")
 
 base {
     archivesName = "${archives_base_name}_${minecraft_version}"
@@ -20,6 +20,10 @@ repositories {
     }
 }
 
+ext {
+    lombok_version = System.getenv("LOMBOK_VERSION") ?: project.findProperty("lombok_version")
+    mcqq_tool_version = System.getenv("MCQQ_TOOL_VERSION") ?: project.findProperty("mcqq_tool_version")
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -28,9 +32,9 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
-    implementation "org.projectlombok:lombok:${project.lombok_version}"
-    implementation "com.github.theword.mcqq:mc-qq-tool:${project.mcqq_tool_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
+    implementation "org.projectlombok:lombok:${lombok_version}"
+    implementation "com.github.theword.mcqq:mc-qq-tool:${mcqq_tool_version}"
 }
 
 processResources {
