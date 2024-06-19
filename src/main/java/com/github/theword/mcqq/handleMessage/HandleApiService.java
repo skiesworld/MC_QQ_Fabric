@@ -4,6 +4,7 @@ import com.github.theword.mcqq.returnBody.returnModle.MyBaseComponent;
 import com.github.theword.mcqq.returnBody.returnModle.MyTextComponent;
 import com.github.theword.mcqq.returnBody.returnModle.SendTitle;
 import com.github.theword.mcqq.utils.ParseJsonToEvent;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
@@ -58,7 +59,7 @@ public class HandleApiService implements HandleApi {
         sendPacket(new GameMessageS2CPacket(parseJsonToEvent.parseMessages(messageList), true));
     }
 
-    private void sendPacket(net.minecraft.network.packet.Packet<?> packet) {
+    private void sendPacket(Packet<?> packet) {
         for (ServerPlayerEntity player : minecraftServer.getPlayerManager().getPlayerList()) {
             player.networkHandler.sendPacket(packet);
         }
