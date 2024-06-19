@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version '1.5-SNAPSHOT'
     id 'maven-publish'
+    id 'checkstyle'
 }
 
 group = project.maven_group
@@ -23,6 +24,11 @@ repositories {
 ext {
     lombok_version = System.getenv("LOMBOK_VERSION") ?: project.findProperty("lombok_version")
     mcqq_tool_version = System.getenv("MCQQ_TOOL_VERSION") ?: project.findProperty("mcqq_tool_version")
+}
+
+checkstyle {
+    toolVersion = "8.44"
+    configFile = file("${rootDir}/checkstyle.xml")
 }
 
 dependencies {
