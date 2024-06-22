@@ -19,9 +19,9 @@ import java.util.UUID;
 public class ParseJsonToEvent {
 
     public MutableText parseMessages(List<? extends MyBaseComponent> myBaseComponentList) {
-        MutableText mutableText = parsePerMessageToMultiText(myBaseComponentList.getFirst());
-        for (int i = 1; i < myBaseComponentList.size(); i++) {
-            mutableText.append(parsePerMessageToMultiText(myBaseComponentList.get(i)));
+        MutableText mutableText = Text.empty();
+        for (MyBaseComponent myBaseComponent : myBaseComponentList) {
+            mutableText.append(parsePerMessageToMultiText(myBaseComponent));
         }
         return mutableText;
     }
@@ -33,8 +33,7 @@ public class ParseJsonToEvent {
             identifier = Identifier.of(myBaseComponent.getFont());
         }
 
-        Style style = Style.EMPTY.
-                withColor(Formatting.byName(myBaseComponent.getColor()))
+        Style style = Style.EMPTY
                 .withBold(myBaseComponent.isBold())
                 .withItalic(myBaseComponent.isItalic())
                 .withUnderline(myBaseComponent.isUnderlined())
@@ -42,6 +41,8 @@ public class ParseJsonToEvent {
                 .withObfuscated(myBaseComponent.isObfuscated())
                 .withInsertion(myBaseComponent.getInsertion())
                 .withFont(identifier);
+        if (myBaseComponent.getColor() != null && !myBaseComponent.getColor().isEmpty())
+            style.withColor(Formatting.byName(myBaseComponent.getColor()));
 
 
         // 配置 TextComponent 额外属性
@@ -70,11 +71,7 @@ public class ParseJsonToEvent {
                         MyHoverEntity myHoverEntity = myTextComponent.getHoverEvent().getEntity();
                         Optional<EntityType<?>> entityType = EntityType.get(myHoverEntity.getType());
                         if (entityType.isPresent()) {
-                            MutableText tempHoverText = Text.literal(myHoverEntity.getName().getFirst().getText());
-                            for (int i = 1; i < myHoverEntity.getName().size(); i++) {
-                                tempHoverText.append(parsePerMessageToMultiText(myHoverEntity.getName().get(i)));
-                            }
-                            HoverEvent.EntityContent entityTooltipInfo = new HoverEvent.EntityContent(entityType.get(), UUID.randomUUID(), tempHoverText);
+                            HoverEvent.EntityContent entityTooltipInfo = new HoverEvent.EntityContent(entityType.get(), UUID.randomUUID(), parseMessages(myHoverEntity.getName()));
                             hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ENTITY, entityTooltipInfo);
                         }
                     }
