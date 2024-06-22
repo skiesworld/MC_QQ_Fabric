@@ -4,6 +4,7 @@ import com.github.theword.mcqq.returnBody.returnModle.MyBaseComponent;
 import com.github.theword.mcqq.returnBody.returnModle.MyTextComponent;
 import com.github.theword.mcqq.returnBody.returnModle.SendTitle;
 import com.github.theword.mcqq.utils.ParseJsonToEvent;
+import com.github.theword.mcqq.utils.Tool;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
@@ -28,8 +29,10 @@ public class HandleApiService implements HandleApi {
      */
     @Override
     public void handleBroadcastMessage(WebSocket webSocket, List<MyTextComponent> messageList) {
+        MutableText mutableText = parseJsonToEvent.parsePerMessageToMultiText(Tool.getPrefixComponent());
+        mutableText.append(parseJsonToEvent.parseMessages(messageList));
         for (ServerPlayerEntity serverPlayer : minecraftServer.getPlayerManager().getPlayerList()) {
-            serverPlayer.sendMessage(parseJsonToEvent.parseMessages(messageList));
+            serverPlayer.sendMessage(mutableText);
         }
     }
 
