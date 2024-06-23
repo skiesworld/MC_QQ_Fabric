@@ -4,6 +4,9 @@ import com.github.theword.mcqq.returnBody.returnModle.MyBaseComponent;
 import com.github.theword.mcqq.returnBody.returnModle.MyTextComponent;
 import com.github.theword.mcqq.returnBody.returnModle.SendTitle;
 import com.github.theword.mcqq.utils.ParseJsonToEvent;
+import com.github.theword.mcqq.utils.Tool;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
@@ -26,9 +29,10 @@ public class HandleApiService implements HandleApi {
      */
     @Override
     public void handleBroadcastMessage(WebSocket webSocket, List<MyTextComponent> messageList) {
-        MutableText result = parseJsonToEvent.parseMessages(messageList);
+        MutableText mutableText = parseJsonToEvent.parsePerMessageToMultiText(Tool.getPrefixComponent());
+        mutableText.append(parseJsonToEvent.parseMessages(messageList));
         for (ServerPlayerEntity serverPlayer : minecraftServer.getPlayerManager().getPlayerList()) {
-            serverPlayer.sendMessage(result);
+            serverPlayer.sendMessage(mutableText);
         }
     }
 
@@ -40,12 +44,10 @@ public class HandleApiService implements HandleApi {
      */
     @Override
     public void handleSendTitleMessage(WebSocket webSocket, SendTitle sendTitle) {
-        for (ServerPlayerEntity serverPlayer : minecraftServer.getPlayerManager().getPlayerList()) {
-            serverPlayer.networkHandler.sendPacket(new TitleS2CPacket(parseJsonToEvent.parseMessages(sendTitle.getTitle())));
-            if (sendTitle.getSubtitle() != null)
-                serverPlayer.networkHandler.sendPacket(new SubtitleS2CPacket(parseJsonToEvent.parseMessages(sendTitle.getSubtitle())));
-            serverPlayer.networkHandler.sendPacket(new TitleFadeS2CPacket(sendTitle.getFadein(), sendTitle.getStay(), sendTitle.getFadeout()));
-        }
+        sendPacket(new TitleS2CPacket(parseJsonToEvent.parseMessages(sendTitle.getTitle())));
+        if (sendTitle.getSubtitle() != null)
+            sendPacket(new SubtitleS2CPacket(parseJsonToEvent.parseMessages(sendTitle.getSubtitle())));
+        sendPacket(new TitleFadeS2CPacket(sendTitle.getFadein(), sendTitle.getStay(), sendTitle.getFadeout()));
     }
 
     /**
@@ -56,8 +58,12 @@ public class HandleApiService implements HandleApi {
      */
     @Override
     public void handleActionBarMessage(WebSocket webSocket, List<MyBaseComponent> messageList) {
-        for (ServerPlayerEntity serverPlayer : minecraftServer.getPlayerManager().getPlayerList()) {
-            serverPlayer.sendMessage(parseJsonToEvent.parseMessages(messageList), false);
+        sendPacket(new GameMessageS2CPacket(parseJsonToEvent.parseMessages(messageList), true));
+    }
+
+    private void sendPacket(Packet<?> packet) {
+        for (ServerPlayerEntity player : minecraftServer.getPlayerManager().getPlayerList()) {
+            player.networkHandler.sendPacket(packet);
         }
     }
 }
