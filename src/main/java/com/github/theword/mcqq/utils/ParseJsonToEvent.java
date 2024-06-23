@@ -41,7 +41,7 @@ public class ParseJsonToEvent {
                 .withFont(identifier);
         if (myBaseComponent.getColor() != null && !myBaseComponent.getColor().isEmpty())
             style.withColor(TextColor.parse(myBaseComponent.getColor()));
-
+        else style.withColor(TextColor.parse("white"));
 
         // 配置 TextComponent 额外属性
         if (myBaseComponent instanceof MyTextComponent myTextComponent) {
