@@ -30,7 +30,7 @@ public class ParseJsonToEvent {
         MutableText mutableText = Text.literal(myBaseComponent.getText());
         Identifier identifier = null;
         if (myBaseComponent.getFont() != null) {
-            identifier = Identifier.of(myBaseComponent.getFont());
+            identifier = Identifier.tryParse(myBaseComponent.getFont());
         }
 
         Style style = Style.EMPTY
@@ -43,7 +43,7 @@ public class ParseJsonToEvent {
                 .withFont(identifier);
         if (myBaseComponent.getColor() != null && !myBaseComponent.getColor().isEmpty())
             style.withColor(Formatting.byName(myBaseComponent.getColor()));
-        else style.withColor(TextColor.parse("white"));
+        else style.withColor(TextColor.parse("white").getOrThrow());
 
         // 配置 TextComponent 额外属性
         if (myBaseComponent instanceof MyTextComponent myTextComponent) {
