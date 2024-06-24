@@ -12,14 +12,14 @@ on:
     branches-ignore:
       - "dev-*"
   pull_request:
-    types: [opened, synchronize]
+    types: [ opened, synchronize ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     env:
-      BUILD_DIR: target/
+      BUILD_DIR: build/libs/
       JAR_PATTERN: MC_QQ_*.jar
       MCQQ_TOOL_VERSION: ${{ vars.MCQQ_TOOL_VERSION }}
       MC_QQ_VERSION: ${{ vars.MC_QQ_VERSION }}
